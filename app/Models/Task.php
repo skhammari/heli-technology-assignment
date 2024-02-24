@@ -12,7 +12,8 @@ class Task extends Model
 	protected $fillable = [
 		'title',
 		'description',
-		'completed'
+		'completed',
+		'completed_at'
 	];
 
 	protected $casts = [
