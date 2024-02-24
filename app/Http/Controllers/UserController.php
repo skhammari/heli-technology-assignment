@@ -3,7 +3,6 @@
 	namespace App\Http\Controllers;
 
 	use App\Http\Requests\UserSignupRequest;
-	use App\Models\User;
 	use App\Services\AuthService;
 	use Illuminate\Http\JsonResponse;
 	use Illuminate\Http\Request;
@@ -16,12 +15,12 @@
 
 			try {
 				$token = $authService->CreateUser($validated);
-				return \Response::json([
+				return response()->json([
 					'message' => 'User created successfully',
 					'token'   => $token
 				], 201);
 			} catch (\Exception $e) {
-				return \Response::json([
+				return response()->json([
 					'message' => $e->getMessage()
 				], $e->getCode());
 			}
@@ -37,12 +36,12 @@
 
 			try {
 				$token = $authService->LoginUser($request->all());
-				return \Response::json([
+				return response()->json([
 					'message' => 'User logged in successfully',
 					'token'   => $token
-				], 200);
+				]);
 			} catch (\Exception $e) {
-				return \Response::json([
+				return response()->json([
 					'message' => $e->getMessage()
 				], $e->getCode());
 			}
