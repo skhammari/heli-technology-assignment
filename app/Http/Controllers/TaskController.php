@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskCollection;
+use App\Http\Resources\TaskResource;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
 
@@ -26,9 +28,12 @@ class TaskController extends Controller
 		}
 	}
 
-	public function complete(int $taskId, TaskService $taskService) {
+	public function complete(Request $request, TaskService $taskService) {
+		$request->validate([
+			'taskId' => 'required|integer'
+		]);
 		try {
-			$taskService->completeTask($taskId);
+			$taskService->completeTask($request['taskId']);
 			return response()->json([
 				'message' => 'Task completed successfully.'
 			]);
@@ -41,9 +46,7 @@ class TaskController extends Controller
 
 	public function all()
 	{
-		$tasks = auth()->user()->tasks()->get();
-		return response()->json([
-			'tasks' => $tasks
-		]);
+		$tasks = auth()->user()->tasks()->paginate(10);
+		return new TaskCollection($tasks);
 	}
 }
